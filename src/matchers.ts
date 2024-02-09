@@ -94,6 +94,30 @@ const singleLineCommentMatcher: Matcher = ({ text, posStart }) => {
   };
 };
 
+const multiLineCommentMatcher: Matcher = ({ text, posStart }) => {
+  if (
+    !(text[posStart] === "{" || text.slice(posStart, posStart + 2) === "(*")
+  ) {
+    return null;
+  }
+
+  const closingSymbol = text[posStart] === "{" ? "}" : "*)";
+  let posEnd = posStart + 2;
+  while (
+    posEnd < text.length &&
+    text.slice(posEnd - closingSymbol.length, posEnd) !== closingSymbol
+  ) {
+    posEnd++;
+  }
+  return {
+    token: {
+      type: "multi-line-comment",
+      content: text.slice(posStart, posEnd),
+    },
+    posNext: posEnd,
+  };
+};
+
 const specialDoubleSymbolsMatcher: Matcher = ({ text, posStart }) => {
   if (!specialDoubleSymbols.includes(text.slice(posStart, posStart + 2))) {
     return null;
@@ -163,6 +187,7 @@ const matchers: Matcher[] = [
   blankCharactersMatcher,
   stringMatcher,
   singleLineCommentMatcher,
+  multiLineCommentMatcher,
   specialDoubleSymbolsMatcher,
   specialSingleSymbolsMatcher,
   identifierMatcher,
