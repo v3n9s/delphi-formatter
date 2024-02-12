@@ -158,14 +158,11 @@ const identifierMatcher: Matcher = ({ text, posStart }) => {
   ) {
     posEnd++;
   }
-  const tokenContent = text.slice(posStart, posEnd);
-  let token: Token;
-  if (keywords.includes(tokenContent.toLowerCase())) {
-    token = { type: "keyword", content: tokenContent.toLowerCase() };
-  } else {
-    token = { type: "identifier", content: tokenContent };
-  }
-  return { token, posNext: posEnd };
+  const content = text.slice(posStart, posEnd);
+  const type = keywords.includes(content.toLowerCase())
+    ? "keyword"
+    : "identifier";
+  return { token: { type, content }, posNext: posEnd };
 };
 
 const numberRegExp = /^[+-]?([0-9]+(\.[0-9]+)?([eE][0-9]+)?|\$[0-9a-fA-F]+)/;
