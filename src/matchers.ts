@@ -17,8 +17,19 @@ const isLetterAllowedAsTailOfVarName = (l: string): boolean => {
   return isLetterAllowedAsFirstLetterOfVarName(l) || digits.includes(l);
 };
 
+export type TokenType =
+  | "blank-character"
+  | "string"
+  | "single-line-comment"
+  | "multi-line-comment"
+  | "special-single-symbol"
+  | "special-double-symbol"
+  | "keyword"
+  | "identifier"
+  | "number";
+
 export type Token = {
-  type: string;
+  type: TokenType;
   content: string;
 };
 
