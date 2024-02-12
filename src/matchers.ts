@@ -168,18 +168,17 @@ const identifierMatcher: Matcher = ({ text, posStart }) => {
   return { token, posNext: posEnd };
 };
 
+const numberRegExp = /^[+-]?([0-9]+(\.[0-9]+)?([eE][0-9]+)?|\$[0-9a-fA-F]+)/;
+
 const digitsMatcher: Matcher = ({ text, posStart }) => {
-  if (!digits.includes(text[posStart]!)) {
+  const match = text.slice(posStart).match(numberRegExp);
+  if (!match) {
     return null;
   }
 
-  let posEnd = posStart + 1;
-  while (posEnd < text.length && digits.includes(text[posEnd]!)) {
-    posEnd++;
-  }
   return {
-    token: { type: "number", content: text.slice(posStart, posEnd) },
-    posNext: posEnd,
+    token: { type: "number", content: match[0] },
+    posNext: posStart + match[0].length,
   };
 };
 
@@ -189,7 +188,7 @@ const matchers: Matcher[] = [
   singleLineCommentMatcher,
   multiLineCommentMatcher,
   specialDoubleSymbolsMatcher,
+  digitsMatcher,
   specialSingleSymbolsMatcher,
   identifierMatcher,
-  digitsMatcher,
 ];
