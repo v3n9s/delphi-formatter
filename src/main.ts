@@ -1,3 +1,4 @@
+import { Config, enforcers } from "./enforcers.js";
 import { Token, getMatch } from "./matchers.js";
 
 const getTokens = (text: string): Token[] => {
@@ -23,4 +24,17 @@ const getTokens = (text: string): Token[] => {
     }
   }
   return tokensList;
+};
+
+const getFormatted = (tokens: Token[], config: Config): string => {
+  tokens = [...tokens];
+  for (let pos = 0; pos < tokens.length; pos++) {
+    enforcers.forEach((f) => {
+      const result = f({ tokens, pos, config });
+      if (result) {
+        pos = Math.min(tokens.length - 1, result.posNext);
+      }
+    });
+  }
+  return tokens.map((t) => t.content).join("");
 };
