@@ -1,7 +1,7 @@
 import { Config, enforcers } from "./enforcers.js";
 import { Token, getMatch } from "./matchers.js";
 
-const getTokens = (text: string): Token[] => {
+export const getTokens = (text: string): Token[] => {
   const tokensList: Token[] = [];
   let posStart = 0;
   while (posStart < text.length) {
@@ -26,7 +26,7 @@ const getTokens = (text: string): Token[] => {
   return tokensList;
 };
 
-const getFormatted = (tokens: Token[], config: Config): string => {
+export const getFormatted = (tokens: Token[], config: Config): string => {
   tokens = [...tokens];
   for (let pos = 0; pos < tokens.length; pos++) {
     enforcers.forEach((f) => {
