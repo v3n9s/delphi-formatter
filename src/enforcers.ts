@@ -22,13 +22,13 @@ type Predicate = (token: Token) => boolean;
 
 type Enforcer = (args: {
   tokens: Token[];
-  pos: number;
+  index: number;
   config: Config;
-}) => void | { posNext: number };
+}) => void | { indexNext: number };
 
 type GetToken = (args: {
   tokens: Token[];
-  pos: number;
+  index: number;
   predicate: Predicate;
 }) => {
   index: number;
@@ -58,63 +58,66 @@ const commentPredicate: Predicate = (token) => {
   return ["single-line-comment", "multi-line-comment"].includes(token.type);
 };
 
-const getPrevToken: GetToken = ({ tokens, pos, predicate }) => {
+const getPrevToken: GetToken = ({ tokens, index, predicate }) => {
   const ind = minusOneToNull(
-    tokens.slice(0, pos).reverse().findIndex(predicate),
+    tokens.slice(0, index).reverse().findIndex(predicate),
   );
   if (ind !== null) {
-    const index = pos - 1 - ind;
-    const token = tokens[index];
+    const tokenIndex = index - 1 - ind;
+    const token = tokens[tokenIndex];
     if (token) {
-      return { index, tokensAmountBetween: ind, token };
+      return { index: tokenIndex, tokensAmountBetween: ind, token };
     }
   }
   return null;
 };
 
-const getNextToken: GetToken = ({ tokens, pos, predicate }) => {
-  const ind = minusOneToNull(tokens.slice(pos + 1).findIndex(predicate));
+const getNextToken: GetToken = ({ tokens, index, predicate }) => {
+  const ind = minusOneToNull(tokens.slice(index + 1).findIndex(predicate));
   if (ind !== null) {
-    const index = pos + 1 + ind;
-    const token = tokens[index];
+    const tokenIndex = index + 1 + ind;
+    const token = tokens[tokenIndex];
     if (token) {
-      return { index, tokensAmountBetween: ind, token };
+      return { index: tokenIndex, tokensAmountBetween: ind, token };
     }
   }
   return null;
 };
 
-const enforceNoTrailingEmpty: Enforcer = ({ tokens, pos, config }) => {
-  const token = tokens[pos]!;
+const enforceNoTrailingEmpty: Enforcer = ({ tokens, index, config }) => {
+  const token = tokens[index]!;
   if (config.trailingBlankCharacters === "remove") {
     if (token.content === "\n") {
       const entry = getPrevToken({
         tokens,
-        pos,
+        index,
         predicate: (token) =>
           !blankCharacterPredicate(token) || newLinePredicate(token),
       });
       if (entry) {
         tokens.splice(entry.index + 1, entry.tokensAmountBetween);
-        return { posNext: entry.index + 1 };
+        return { indexNext: entry.index + 1 };
       }
-    } else if (pos === tokens.length - 1 && token.type === "blank-character") {
+    } else if (
+      index === tokens.length - 1 &&
+      token.type === "blank-character"
+    ) {
       const entry = getPrevToken({
         tokens,
-        pos,
+        index,
         predicate: (token) =>
           !blankCharacterPredicate(token) || newLinePredicate(token),
       });
       if (entry) {
         tokens.splice(entry.index + 1, entry.tokensAmountBetween + 1);
-        return { posNext: entry.index + 1 };
+        return { indexNext: entry.index + 1 };
       }
     }
   }
 };
 
-const enforceNewLine: Enforcer = ({ tokens, pos, config }) => {
-  const token = tokens[pos]!;
+const enforceNewLine: Enforcer = ({ tokens, index, config }) => {
+  const token = tokens[index]!;
   const cfg =
     config.newLineAfterSemicolon && token.content === ";"
       ? config.newLineAfterSemicolon
@@ -125,7 +128,7 @@ const enforceNewLine: Enforcer = ({ tokens, pos, config }) => {
   if (cfg) {
     const entry = getNextToken({
       tokens,
-      pos,
+      index,
       predicate: (token) =>
         (cfg.comments === "allow"
           ? !commentPredicate(token)
@@ -140,10 +143,10 @@ const enforceNewLine: Enforcer = ({ tokens, pos, config }) => {
 
 const enforceNewLineInStructuredStatements: Enforcer = ({
   tokens,
-  pos,
+  index,
   config,
 }) => {
-  const token = tokens[pos]!;
+  const token = tokens[index]!;
   if (
     config.newLineInStructuredStatments &&
     ["then", "else", "do"].includes(token.content.toLowerCase())
@@ -152,7 +155,7 @@ const enforceNewLineInStructuredStatements: Enforcer = ({
 
     const entry = getNextToken({
       tokens,
-      pos,
+      index,
       predicate: (token) => !blankCharacterPredicate(token),
     });
     if (
@@ -174,7 +177,7 @@ const enforceNewLineInStructuredStatements: Enforcer = ({
         entry.token.content.toLowerCase() !== "begin" &&
         !commentPredicate(entry.token))
     ) {
-      tokens.splice(pos + 1, entry.tokensAmountBetween, createBlank());
+      tokens.splice(index + 1, entry.tokensAmountBetween, createBlank());
     }
   }
 };

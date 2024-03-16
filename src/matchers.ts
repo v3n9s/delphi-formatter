@@ -33,14 +33,14 @@ export type Token = {
   content: string;
 };
 
-type Matcher = (args: { text: string; posStart: number }) => {
+type Matcher = (args: { text: string; indexStart: number }) => {
   token: Token;
-  posNext: number;
+  indexNext: number;
 } | null;
 
-export const getMatch: Matcher = ({ text, posStart }) => {
+export const getMatch: Matcher = ({ text, indexStart }) => {
   for (const matcher of matchers) {
-    const match = matcher({ text, posStart });
+    const match = matcher({ text, indexStart });
     if (match) {
       return match;
     }
@@ -48,145 +48,148 @@ export const getMatch: Matcher = ({ text, posStart }) => {
   return null;
 };
 
-const blankCharactersMatcher: Matcher = ({ text, posStart }) => {
-  if (!blankCharacters.includes(text[posStart]!)) {
+const blankCharactersMatcher: Matcher = ({ text, indexStart }) => {
+  if (!blankCharacters.includes(text[indexStart]!)) {
     return null;
   }
 
   return {
     token: {
       type: "blank-character",
-      content: text[posStart]!,
+      content: text[indexStart]!,
     },
-    posNext: posStart + 1,
+    indexNext: indexStart + 1,
   };
 };
 
-const stringMatcher: Matcher = ({ text, posStart }) => {
-  if (!(text[posStart] === "'")) {
+const stringMatcher: Matcher = ({ text, indexStart }) => {
+  if (!(text[indexStart] === "'")) {
     return null;
   }
 
-  let posEnd = posStart + 2;
-  while (posEnd < text.length) {
-    if (text[posEnd - 1] === "'") {
-      if (text[posEnd] !== "'") {
+  let indexEnd = indexStart + 2;
+  while (indexEnd < text.length) {
+    if (text[indexEnd - 1] === "'") {
+      if (text[indexEnd] !== "'") {
         break;
       } else {
-        posEnd++;
+        indexEnd++;
       }
     }
-    posEnd++;
+    indexEnd++;
   }
   return {
     token: {
       type: "string",
-      content: text.slice(posStart, posEnd),
+      content: text.slice(indexStart, indexEnd),
     },
-    posNext: posEnd,
+    indexNext: indexEnd,
   };
 };
 
-const singleLineCommentMatcher: Matcher = ({ text, posStart }) => {
-  if (!(text.slice(posStart, posStart + 2) === "//")) {
+const singleLineCommentMatcher: Matcher = ({ text, indexStart }) => {
+  if (!(text.slice(indexStart, indexStart + 2) === "//")) {
     return null;
   }
 
-  let posEnd = posStart + 2;
-  while (posEnd < text.length && text[posEnd] !== "\n") {
-    posEnd++;
+  let indexEnd = indexStart + 2;
+  while (indexEnd < text.length && text[indexEnd] !== "\n") {
+    indexEnd++;
   }
   return {
     token: {
       type: "single-line-comment",
-      content: text.slice(posStart, posEnd),
+      content: text.slice(indexStart, indexEnd),
     },
-    posNext: posEnd,
+    indexNext: indexEnd,
   };
 };
 
-const multiLineCommentMatcher: Matcher = ({ text, posStart }) => {
+const multiLineCommentMatcher: Matcher = ({ text, indexStart }) => {
   if (
-    !(text[posStart] === "{" || text.slice(posStart, posStart + 2) === "(*")
+    !(
+      text[indexStart] === "{" ||
+      text.slice(indexStart, indexStart + 2) === "(*"
+    )
   ) {
     return null;
   }
 
-  const closingSymbol = text[posStart] === "{" ? "}" : "*)";
-  let posEnd = posStart + 2;
+  const closingSymbol = text[indexStart] === "{" ? "}" : "*)";
+  let indexEnd = indexStart + 2;
   while (
-    posEnd < text.length &&
-    text.slice(posEnd - closingSymbol.length, posEnd) !== closingSymbol
+    indexEnd < text.length &&
+    text.slice(indexEnd - closingSymbol.length, indexEnd) !== closingSymbol
   ) {
-    posEnd++;
+    indexEnd++;
   }
   return {
     token: {
       type: "multi-line-comment",
-      content: text.slice(posStart, posEnd),
+      content: text.slice(indexStart, indexEnd),
     },
-    posNext: posEnd,
+    indexNext: indexEnd,
   };
 };
 
-const specialDoubleSymbolsMatcher: Matcher = ({ text, posStart }) => {
-  if (!specialDoubleSymbols.includes(text.slice(posStart, posStart + 2))) {
+const specialDoubleSymbolsMatcher: Matcher = ({ text, indexStart }) => {
+  if (!specialDoubleSymbols.includes(text.slice(indexStart, indexStart + 2))) {
     return null;
   }
 
   return {
     token: {
       type: "special-double-symbol",
-      content: text.slice(posStart, posStart + 2),
+      content: text.slice(indexStart, indexStart + 2),
     },
-    posNext: posStart + 2,
+    indexNext: indexStart + 2,
   };
 };
 
-const specialSingleSymbolsMatcher: Matcher = ({ text, posStart }) => {
-  if (!specialSingleSymbols.includes(text[posStart]!)) {
+const specialSingleSymbolsMatcher: Matcher = ({ text, indexStart }) => {
+  if (!specialSingleSymbols.includes(text[indexStart]!)) {
     return null;
   }
 
   return {
     token: {
       type: "special-single-symbol",
-      content: text[posStart]!,
+      content: text[indexStart]!,
     },
-    posNext: posStart + 1,
+    indexNext: indexStart + 1,
   };
 };
 
-const identifierMatcher: Matcher = ({ text, posStart }) => {
-  if (!isLetterAllowedAsFirstLetterOfVarName(text[posStart]!)) {
+const identifierMatcher: Matcher = ({ text, indexStart }) => {
+  if (!isLetterAllowedAsFirstLetterOfVarName(text[indexStart]!)) {
     return null;
   }
 
-  let posEnd = posStart;
+  let indexEnd = indexStart;
   while (
-    posEnd < text.length &&
-    isLetterAllowedAsTailOfVarName(text[posEnd]!)
+    indexEnd < text.length &&
+    isLetterAllowedAsTailOfVarName(text[indexEnd]!)
   ) {
-    posEnd++;
+    indexEnd++;
   }
-  const content = text.slice(posStart, posEnd);
+  const content = text.slice(indexStart, indexEnd);
   const type = keywords.includes(content.toLowerCase())
     ? "keyword"
     : "identifier";
-  return { token: { type, content }, posNext: posEnd };
+  return { token: { type, content }, indexNext: indexEnd };
 };
 
 const numberRegExp = /^[+-]?([0-9]+(\.[0-9]+)?([eE][0-9]+)?|\$[0-9a-fA-F]+)/;
 
-const digitsMatcher: Matcher = ({ text, posStart }) => {
-  const match = text.slice(posStart).match(numberRegExp);
+const digitsMatcher: Matcher = ({ text, indexStart }) => {
+  const match = text.slice(indexStart).match(numberRegExp);
   if (!match) {
     return null;
   }
 
   return {
     token: { type: "number", content: match[0] },
-    posNext: posStart + match[0].length,
+    indexNext: indexStart + match[0].length,
   };
 };
 

@@ -3,18 +3,18 @@ import { Token, getMatch } from "./matchers.js";
 
 export const getTokens = (text: string): Token[] => {
   const tokensList: Token[] = [];
-  let posStart = 0;
-  while (posStart < text.length) {
-    const match = getMatch({ text, posStart });
+  let indexStart = 0;
+  while (indexStart < text.length) {
+    const match = getMatch({ text, indexStart });
     if (match) {
       tokensList.push(match.token);
-      posStart = match.posNext;
+      indexStart = match.indexNext;
     } else {
       throw new Error(
         JSON.stringify(
           {
-            posStart,
-            token: text.slice(posStart, posStart + 50),
+            indexStart,
+            token: text.slice(indexStart, indexStart + 50),
             tokensList: tokensList.slice(-10),
           },
           null,
@@ -28,11 +28,11 @@ export const getTokens = (text: string): Token[] => {
 
 export const getFormatted = (tokens: Token[], config: Config): string => {
   tokens = [...tokens];
-  for (let pos = 0; pos < tokens.length; pos++) {
+  for (let index = 0; index < tokens.length; index++) {
     enforcers.forEach((f) => {
-      const result = f({ tokens, pos, config });
+      const result = f({ tokens, index, config });
       if (result) {
-        pos = Math.min(tokens.length - 1, result.posNext);
+        index = Math.min(tokens.length - 1, result.indexNext);
       }
     });
   }
