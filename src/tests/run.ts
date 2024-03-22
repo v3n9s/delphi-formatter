@@ -5,6 +5,7 @@ import { formatters } from "./formatters.js";
 import { trailingBlanks } from "./trailing-blanks.js";
 import { newLineAfterTokens } from "./new-line-after-tokens.js";
 import { newLineInStructuredStatements } from "./new-line-in-structured-statements.js";
+import { indent } from "./indent.js";
 
 const enforcers: Test[] = [
   ...parsers,
@@ -12,6 +13,7 @@ const enforcers: Test[] = [
   ...trailingBlanks,
   ...newLineAfterTokens,
   ...newLineInStructuredStatements,
+  ...indent,
 ];
 
 const failedTests = enforcers
