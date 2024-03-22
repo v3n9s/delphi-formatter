@@ -1,4 +1,4 @@
-import { enforcers } from "./enforcers.js";
+import { createEnforcers } from "./enforcers.js";
 import { Config } from "./enforcers/common.js";
 import { Token, getMatch } from "./matchers.js";
 
@@ -29,6 +29,7 @@ export const getTokens = (text: string): Token[] => {
 
 export const getFormatted = (tokens: Token[], config: Config): string => {
   tokens = [...tokens];
+  const enforcers = createEnforcers();
   for (let index = 0; index < tokens.length; index++) {
     enforcers.forEach((f) => {
       const result = f({ tokens, index, config });

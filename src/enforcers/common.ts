@@ -1,5 +1,10 @@
 import { Token } from "../matchers.js";
 
+export type IndentConfig = {
+  size: number;
+  spaceAfterIf?: undefined | "add";
+};
+
 export type NewLineConfig = {
   comments: "allow" | "forbid";
 };
@@ -12,6 +17,7 @@ export type NewLineInStructuredStatements = {
 };
 
 export type Config = {
+  indent?: undefined | IndentConfig;
   trailingBlankCharacters?: undefined | "remove";
   newLineAfterSemicolon?: undefined | NewLineConfig;
   newLineAfterBegin?: undefined | NewLineConfig;

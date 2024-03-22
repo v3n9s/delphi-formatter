@@ -1,12 +1,16 @@
 import { Enforcer } from "./enforcers/common.js";
+import { createIndentEnforcer } from "./enforcers/indent.js";
 import {
   enforceNewLine,
   enforceNewLineInStructuredStatements,
   enforceNoTrailingEmpty,
 } from "./enforcers/rest.js";
 
-export const enforcers: Enforcer[] = [
-  enforceNewLine,
-  enforceNewLineInStructuredStatements,
-  enforceNoTrailingEmpty,
-];
+export const createEnforcers = (): Enforcer[] => {
+  return [
+    enforceNewLine,
+    enforceNewLineInStructuredStatements,
+    createIndentEnforcer(),
+    enforceNoTrailingEmpty,
+  ];
+};
