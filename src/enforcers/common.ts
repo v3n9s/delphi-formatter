@@ -24,13 +24,17 @@ export type NewLineInStructuredStatements = {
   other?: Position;
 };
 
+export type ConfigRequired = {
+  keywords: KeywordsConfig;
+  indent: IndentConfig;
+  blankCharacters: BlankCharactersConfig;
+  newLineAfterSemicolon: NewLineConfig;
+  newLineAfterBegin: NewLineConfig;
+  newLineInStructuredStatments: NewLineInStructuredStatements;
+};
+
 export type Config = {
-  keywords?: undefined | KeywordsConfig;
-  indent?: undefined | IndentConfig;
-  blankCharacters?: undefined | BlankCharactersConfig;
-  newLineAfterSemicolon?: undefined | NewLineConfig;
-  newLineAfterBegin?: undefined | NewLineConfig;
-  newLineInStructuredStatments?: undefined | NewLineInStructuredStatements;
+  [K in keyof ConfigRequired]?: undefined | ConfigRequired[K];
 };
 
 export type Predicate = (token: Token) => boolean;
