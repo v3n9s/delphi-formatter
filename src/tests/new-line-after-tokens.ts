@@ -23,7 +23,7 @@ if true then B := true;`;
         getFormatted(tokens, {
           newLineAfterBegin: { comments: "allow" },
           newLineAfterSemicolon: { comments: "allow" },
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         }),
         textExpected,
       );
@@ -51,7 +51,7 @@ if true then B := true;`;
         getFormatted(tokens, {
           newLineAfterBegin: { comments: "forbid" },
           newLineAfterSemicolon: { comments: "forbid" },
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         }),
         textExpected,
       );

@@ -9,6 +9,10 @@ export type IndentConfig = {
   spaceAfterIf?: undefined | "add";
 };
 
+export type BlankCharactersConfig = {
+  trailing: "remove";
+};
+
 export type NewLineConfig = {
   comments: "allow" | "forbid";
 };
@@ -23,7 +27,7 @@ export type NewLineInStructuredStatements = {
 export type Config = {
   keywords?: undefined | KeywordsConfig;
   indent?: undefined | IndentConfig;
-  trailingBlankCharacters?: undefined | "remove";
+  blankCharacters?: undefined | BlankCharactersConfig;
   newLineAfterSemicolon?: undefined | NewLineConfig;
   newLineAfterBegin?: undefined | NewLineConfig;
   newLineInStructuredStatments?: undefined | NewLineInStructuredStatements;

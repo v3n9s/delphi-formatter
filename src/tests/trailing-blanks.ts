@@ -25,7 +25,7 @@ end
 if True then B := True; 
 `;
       const formatted = getFormatted(getTokens(text), {
-        trailingBlankCharacters: "remove",
+        blankCharacters: { trailing: "remove" },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -37,7 +37,7 @@ if True then B := True;
         const textExpected = `program name;`;
         const text = `program name; `;
         const formatted = getFormatted(getTokens(text), {
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         });
         deepStrictEqual(formatted, textExpected);
       }
@@ -46,7 +46,7 @@ if True then B := True;
         const textExpected = `program name;`;
         const text = `program name;  `;
         const formatted = getFormatted(getTokens(text), {
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         });
         deepStrictEqual(formatted, textExpected);
       }
@@ -55,7 +55,7 @@ if True then B := True;
         const textExpected = `program name;`;
         const text = `program name;   `;
         const formatted = getFormatted(getTokens(text), {
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         });
         deepStrictEqual(formatted, textExpected);
       }
@@ -64,7 +64,7 @@ if True then B := True;
         const textExpected = `program name;`;
         const text = `program name;                                    `;
         const formatted = getFormatted(getTokens(text), {
-          trailingBlankCharacters: "remove",
+          blankCharacters: { trailing: "remove" },
         });
         deepStrictEqual(formatted, textExpected);
       }

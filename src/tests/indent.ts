@@ -78,7 +78,7 @@ end;
 end.`;
       const formatted = getFormatted(getTokens(text), {
         indent: { size: 2 },
-        trailingBlankCharacters: "remove",
+        blankCharacters: { trailing: "remove" },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -104,7 +104,7 @@ A := false;
 end.`;
       const formatted = getFormatted(getTokens(text), {
         indent: { size: 2 },
-        trailingBlankCharacters: "remove",
+        blankCharacters: { trailing: "remove" },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -126,7 +126,7 @@ A := true;
 end.`;
       const formatted = getFormatted(getTokens(text), {
         indent: { size: 2 },
-        trailingBlankCharacters: "remove",
+        blankCharacters: { trailing: "remove" },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -166,7 +166,7 @@ A := false;
 end.`;
       const formatted = getFormatted(getTokens(text), {
         indent: { size: 2, spaceAfterIf: "add" },
-        trailingBlankCharacters: "remove",
+        blankCharacters: { trailing: "remove" },
       });
       deepStrictEqual(formatted, textExpected);
     },

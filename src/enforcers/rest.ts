@@ -8,7 +8,7 @@ import {
 
 export const enforceNoTrailingEmpty: Enforcer = ({ tokens, index, config }) => {
   const token = tokens[index]!;
-  if (config.trailingBlankCharacters === "remove") {
+  if (config.blankCharacters) {
     if (token.content === "\n") {
       const entry = getPrevToken({
         tokens,
