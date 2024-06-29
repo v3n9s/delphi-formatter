@@ -103,3 +103,24 @@ export const enforceNewLineInStructuredStatements: Enforcer = ({
     }
   }
 };
+
+export const enforceKeywordsCasing: Enforcer = ({ tokens, index, config }) => {
+  const token = tokens[index]!;
+  if (config.keywords && token.type === "keyword") {
+    const cfg = config.keywords;
+
+    let newContent!: string;
+    if (cfg.casing === "lowercase") {
+      newContent = token.content.toLowerCase();
+    } else if (cfg.casing === "uppercase") {
+      newContent = token.content.toUpperCase();
+    } else if (cfg.casing === "first-letter-uppercase-rest-lowercase") {
+      newContent =
+        token.content[0]!.toUpperCase() + token.content.slice(1).toLowerCase();
+    }
+    tokens[index] = {
+      ...token,
+      content: newContent,
+    };
+  }
+};

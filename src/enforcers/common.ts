@@ -1,5 +1,9 @@
 import { Token } from "../matchers.js";
 
+export type KeywordsConfig = {
+  casing: "lowercase" | "uppercase" | "first-letter-uppercase-rest-lowercase";
+};
+
 export type IndentConfig = {
   size: number;
   spaceAfterIf?: undefined | "add";
@@ -17,6 +21,7 @@ export type NewLineInStructuredStatements = {
 };
 
 export type Config = {
+  keywords?: undefined | KeywordsConfig;
   indent?: undefined | IndentConfig;
   trailingBlankCharacters?: undefined | "remove";
   newLineAfterSemicolon?: undefined | NewLineConfig;
