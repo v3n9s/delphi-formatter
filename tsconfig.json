@@ -1,24 +1,37 @@
 {
-  "include": ["./src"],
+  "include": ["./src", "./eslint.config.js"],
   "exclude": [],
   "compilerOptions": {
+    // type checking
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "strict": true,
 
+    // modules
     "module": "node16",
     "moduleResolution": "node16",
     "rootDir": "./src",
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node"],
 
-    "newLine": "lf",
+    // emit
+    "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
 
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
+    // interop constraints
+    "verbatimModuleSyntax": true,
 
-    "lib": ["es2022"],
+    // language and environment
+    "lib": ["es2023"],
+    "moduleDetection": "force",
     "target": "es2022",
 
+    // completeness
     "skipLibCheck": true
   }
 }

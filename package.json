@@ -2,8 +2,16 @@
   "name": "delphi-formatter",
   "private": true,
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/main.js"
+    }
+  },
   "scripts": {
-    "dev": "tsc --watch --preserveWatchOutput"
+    "clean": "rimraf ./dist",
+    "lint": "eslint .",
+    "dev": "npm run clean && tsc --watch --preserveWatchOutput",
+    "build": "npm run clean && tsc"
   },
   "dependencies": {
     "@types/node": "^20.14.11"
