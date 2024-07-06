@@ -1,5 +1,5 @@
 import { AssertionError } from "assert";
-import { Test } from "./common.js";
+import type { Test } from "./common.js";
 import { parsers } from "./parsers.js";
 import { formatters } from "./formatters.js";
 import { trailingBlanks } from "./trailing-blanks.js";

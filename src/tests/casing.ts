@@ -1,5 +1,5 @@
 import { deepStrictEqual } from "assert";
-import { Test } from "./common.js";
+import type { Test } from "./common.js";
 import { getFormatted, getTokens } from "../main.js";
 
 export const casing: Test[] = [

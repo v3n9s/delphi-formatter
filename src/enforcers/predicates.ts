@@ -1,4 +1,4 @@
-import { Predicate } from "./common.js";
+import type { Predicate } from "./common.js";
 
 export const everythingPredicate: Predicate = () => true;
 

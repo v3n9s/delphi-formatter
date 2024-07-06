@@ -1,4 +1,4 @@
-import { Token } from "../matchers.js";
+import type { Token } from "../matchers.js";
 
 export type KeywordsConfig = {
   casing: "lowercase" | "uppercase" | "first-letter-uppercase-rest-lowercase";

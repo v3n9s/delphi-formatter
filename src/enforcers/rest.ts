@@ -1,4 +1,9 @@
-import { Enforcer, createBlank, getNextToken, getPrevToken } from "./common.js";
+import {
+  type Enforcer,
+  createBlank,
+  getNextToken,
+  getPrevToken,
+} from "./common.js";
 import {
   blankCharacterPredicate,
   commentPredicate,

@@ -1,7 +1,7 @@
-import { Token } from "../matchers.js";
+import type { Token } from "../matchers.js";
 import {
-  Config,
-  Enforcer,
+  type Config,
+  type Enforcer,
   createBlank,
   getNextToken,
   getPrevToken,

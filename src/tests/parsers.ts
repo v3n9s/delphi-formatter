@@ -1,6 +1,6 @@
 import { deepStrictEqual } from "assert";
 import { getTokens } from "../main.js";
-import { Test } from "./common.js";
+import type { Test } from "./common.js";
 
 export const parsers: Test[] = [
   {

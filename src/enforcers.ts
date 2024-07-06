@@ -1,4 +1,4 @@
-import { Enforcer } from "./enforcers/common.js";
+import type { Enforcer } from "./enforcers/common.js";
 import { createIndentEnforcer } from "./enforcers/indent.js";
 import {
   enforceKeywordsCasing,
