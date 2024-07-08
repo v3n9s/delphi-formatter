@@ -8,9 +8,14 @@ type NewLineAfter = {
 
 type Position = "same-line" | "new-line";
 
+type CasingStyle = "preserve" | "lower-case" | "upper-case" | "pascal-case";
+
 export type Config = PartialWithUndefined<{
   keywords: {
-    casing: "lowercase" | "uppercase" | "first-letter-uppercase-rest-lowercase";
+    casing: CasingStyle;
+    override?: {
+      [keyword: string]: CasingStyle;
+    };
   };
   indent: {
     size: number;

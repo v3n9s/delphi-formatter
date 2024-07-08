@@ -1,3 +1,4 @@
+import { keywordsPascalCase } from "../constants.js";
 import {
   type Enforcer,
   createBlank,
@@ -112,17 +113,19 @@ export const enforceNewLineInStructuredStatements: Enforcer = ({
 export const enforceKeywordsCasing: Enforcer = ({ tokens, index, config }) => {
   const token = tokens[index]!;
   if (config.keywords && token.type === "keyword") {
-    const cfg = config.keywords;
+    const casingStyle =
+      config.keywords.override?.[token.content.toLowerCase()] ??
+      config.keywords.casing;
 
-    let newContent!: string;
-    if (cfg.casing === "lowercase") {
-      newContent = token.content.toLowerCase();
-    } else if (cfg.casing === "uppercase") {
-      newContent = token.content.toUpperCase();
-    } else if (cfg.casing === "first-letter-uppercase-rest-lowercase") {
-      newContent =
-        token.content[0]!.toUpperCase() + token.content.slice(1).toLowerCase();
-    }
+    const newContent =
+      casingStyle === "lower-case"
+        ? token.content.toLowerCase()
+        : casingStyle === "upper-case"
+          ? token.content.toUpperCase()
+          : casingStyle === "pascal-case"
+            ? keywordsPascalCase[token.content.toLowerCase()]!
+            : token.content;
+
     tokens[index] = {
       ...token,
       content: newContent,
