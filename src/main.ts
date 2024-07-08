@@ -1,5 +1,5 @@
 import { createEnforcers } from "./enforcers.js";
-import type { Config } from "./enforcers/common.js";
+import type { Config } from "./config.js";
 import { type Token, getMatch } from "./matchers.js";
 
 export const getTokens = (text: string): Token[] => {
