@@ -46,10 +46,10 @@ export const enforceNoTrailingEmpty: Enforcer = ({ tokens, index, config }) => {
 export const enforceNewLine: Enforcer = ({ tokens, index, config }) => {
   const token = tokens[index]!;
   const cfg =
-    config.newLineAfterSemicolon && token.content === ";"
-      ? config.newLineAfterSemicolon
-      : config.newLineAfterBegin && token.content.toLowerCase() === "begin"
-        ? config.newLineAfterBegin
+    config.newLine?.afterSemicolon && token.content === ";"
+      ? config.newLine?.afterSemicolon
+      : config.newLine?.afterBegin && token.content.toLowerCase() === "begin"
+        ? config.newLine?.afterBegin
         : undefined;
 
   if (cfg) {
@@ -57,7 +57,7 @@ export const enforceNewLine: Enforcer = ({ tokens, index, config }) => {
       tokens,
       index,
       predicate: (token) =>
-        (cfg.comments === "allow"
+        (cfg.comments === "preserve"
           ? !commentPredicate(token)
           : everythingPredicate(token)) &&
         (!blankCharacterPredicate(token) || newLinePredicate(token)),
@@ -75,10 +75,10 @@ export const enforceNewLineInStructuredStatements: Enforcer = ({
 }) => {
   const token = tokens[index]!;
   if (
-    config.newLineInStructuredStatments &&
+    config.newLine?.inControlFlowStatements &&
     ["then", "else", "do"].includes(token.content.toLowerCase())
   ) {
-    const cfg = config.newLineInStructuredStatments;
+    const cfg = config.newLine?.inControlFlowStatements;
 
     const entry = getNextToken({
       tokens,
@@ -86,10 +86,10 @@ export const enforceNewLineInStructuredStatements: Enforcer = ({
       predicate: (token) => !blankCharacterPredicate(token),
     });
     if (
-      (cfg.begin === "newline" &&
+      (cfg.begin === "new-line" &&
         entry &&
         entry.token.content.toLowerCase() === "begin") ||
-      (cfg.other === "newline" &&
+      (cfg.other === "new-line" &&
         entry &&
         entry.token.content.toLowerCase() !== "begin" &&
         !commentPredicate(entry.token))

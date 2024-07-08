@@ -1,36 +1,30 @@
-export type KeywordsConfig = {
-  casing: "lowercase" | "uppercase" | "first-letter-uppercase-rest-lowercase";
+type PartialWithUndefined<T> = {
+  [K in keyof T]?: undefined | T[K];
 };
 
-export type IndentConfig = {
-  size: number;
-  spaceAfterIf?: undefined | "add";
+type NewLineAfter = {
+  comments: "preserve" | "new-line";
 };
 
-export type BlankCharactersConfig = {
-  trailing: "remove";
-};
+type Position = "same-line" | "new-line";
 
-export type NewLineConfig = {
-  comments: "allow" | "forbid";
-};
-
-type Position = "same-line" | "newline";
-
-export type NewLineInStructuredStatements = {
-  begin?: Position;
-  other?: Position;
-};
-
-export type ConfigRequired = {
-  keywords: KeywordsConfig;
-  indent: IndentConfig;
-  blankCharacters: BlankCharactersConfig;
-  newLineAfterSemicolon: NewLineConfig;
-  newLineAfterBegin: NewLineConfig;
-  newLineInStructuredStatments: NewLineInStructuredStatements;
-};
-
-export type Config = {
-  [K in keyof ConfigRequired]?: undefined | ConfigRequired[K];
-};
+export type Config = PartialWithUndefined<{
+  keywords: {
+    casing: "lowercase" | "uppercase" | "first-letter-uppercase-rest-lowercase";
+  };
+  indent: {
+    size: number;
+    spaceAfterIf?: undefined | "add";
+  };
+  blankCharacters: {
+    trailing: "remove";
+  };
+  newLine: PartialWithUndefined<{
+    afterSemicolon: NewLineAfter;
+    afterBegin: NewLineAfter;
+    inControlFlowStatements: PartialWithUndefined<{
+      begin: Position;
+      other: Position;
+    }>;
+  }>;
+}>;

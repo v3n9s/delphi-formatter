@@ -11,11 +11,11 @@ begin
 Valid := false;
 end;`;
       const formattedSameLine = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { begin: "same-line" },
+        newLine: { inControlFlowStatements: { begin: "same-line" } },
       });
       deepStrictEqual(formattedSameLine, text);
       const formattedNewLine = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { begin: "newline" },
+        newLine: { inControlFlowStatements: { begin: "new-line" } },
       });
       deepStrictEqual(formattedNewLine, text);
     },
@@ -26,11 +26,11 @@ end;`;
       const text = `if true then // asdf
 Valid := false;`;
       const formattedSameLine = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { other: "same-line" },
+        newLine: { inControlFlowStatements: { other: "same-line" } },
       });
       deepStrictEqual(formattedSameLine, text);
       const formattedNewLine = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { other: "newline" },
+        newLine: { inControlFlowStatements: { other: "new-line" } },
       });
       deepStrictEqual(formattedNewLine, text);
     },
@@ -46,7 +46,7 @@ end;`;
 Valid := false;
 end;`;
       const formatted = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { begin: "newline" },
+        newLine: { inControlFlowStatements: { begin: "new-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -58,7 +58,7 @@ end;`;
 Valid := false;`;
       const text = `if true then Valid := false;`;
       const formatted = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: { other: "newline" },
+        newLine: { inControlFlowStatements: { other: "new-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -72,9 +72,7 @@ end;`;
 begin Valid := false;
 end;`;
       const formatted = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: {
-          begin: "same-line",
-        },
+        newLine: { inControlFlowStatements: { begin: "same-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -86,9 +84,7 @@ end;`;
       const text = `if true then
 Valid := false;`;
       const formatted = getFormatted(getTokens(text), {
-        newLineInStructuredStatments: {
-          other: "same-line",
-        },
+        newLine: { inControlFlowStatements: { other: "same-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },

@@ -21,8 +21,10 @@ if true then B := true;`;
       const tokens = getTokens(text);
       deepStrictEqual(
         getFormatted(tokens, {
-          newLineAfterBegin: { comments: "allow" },
-          newLineAfterSemicolon: { comments: "allow" },
+          newLine: {
+            afterBegin: { comments: "preserve" },
+            afterSemicolon: { comments: "preserve" },
+          },
           blankCharacters: { trailing: "remove" },
         }),
         textExpected,
@@ -49,8 +51,10 @@ if true then B := true;`;
       const tokens = getTokens(text);
       deepStrictEqual(
         getFormatted(tokens, {
-          newLineAfterBegin: { comments: "forbid" },
-          newLineAfterSemicolon: { comments: "forbid" },
+          newLine: {
+            afterBegin: { comments: "new-line" },
+            afterSemicolon: { comments: "new-line" },
+          },
           blankCharacters: { trailing: "remove" },
         }),
         textExpected,
