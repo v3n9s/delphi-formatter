@@ -52,8 +52,8 @@ if true then B := true;`;
       deepStrictEqual(
         getFormatted(tokens, {
           newLine: {
-            afterBegin: { comments: "new-line" },
-            afterSemicolon: { comments: "new-line" },
+            afterBegin: { comments: "next-line" },
+            afterSemicolon: { comments: "next-line" },
           },
           blankCharacters: { trailing: "remove" },
         }),

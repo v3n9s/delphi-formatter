@@ -3,10 +3,10 @@ type PartialWithUndefined<T> = {
 };
 
 type NewLineAfter = {
-  comments: "preserve" | "new-line";
+  comments: "preserve" | "next-line";
 };
 
-type Position = "same-line" | "new-line";
+type Position = "same-line" | "next-line";
 
 type CasingStyle = "preserve" | "lower-case" | "upper-case" | "pascal-case";
 

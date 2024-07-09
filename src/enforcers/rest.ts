@@ -87,15 +87,15 @@ export const enforceNewLineInStructuredStatements: Enforcer = ({
       predicate: (token) => !blankCharacterPredicate(token),
     });
     if (
-      (cfg.begin === "new-line" &&
+      (cfg.begin === "next-line" &&
         entry &&
         entry.token.content.toLowerCase() === "begin") ||
-      (cfg.other === "new-line" &&
+      (cfg.other === "next-line" &&
         entry &&
         entry.token.content.toLowerCase() !== "begin" &&
         !commentPredicate(entry.token))
     ) {
-      tokens.splice(entry.index, 0, createBlank("\n"));
+      tokens.splice(index + 1, entry.tokensAmountBetween, createBlank("\n"));
     } else if (
       (cfg.begin === "same-line" &&
         entry &&

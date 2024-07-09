@@ -15,7 +15,7 @@ end;`;
       });
       deepStrictEqual(formattedSameLine, text);
       const formattedNewLine = getFormatted(getTokens(text), {
-        newLine: { inControlFlowStatements: { begin: "new-line" } },
+        newLine: { inControlFlowStatements: { begin: "next-line" } },
       });
       deepStrictEqual(formattedNewLine, text);
     },
@@ -30,7 +30,7 @@ Valid := false;`;
       });
       deepStrictEqual(formattedSameLine, text);
       const formattedNewLine = getFormatted(getTokens(text), {
-        newLine: { inControlFlowStatements: { other: "new-line" } },
+        newLine: { inControlFlowStatements: { other: "next-line" } },
       });
       deepStrictEqual(formattedNewLine, text);
     },
@@ -38,7 +38,7 @@ Valid := false;`;
   {
     description: "expect to move begin on new line",
     f: () => {
-      const textExpected = `if true then 
+      const textExpected = `if true then
 begin
 Valid := false;
 end;`;
@@ -46,7 +46,7 @@ end;`;
 Valid := false;
 end;`;
       const formatted = getFormatted(getTokens(text), {
-        newLine: { inControlFlowStatements: { begin: "new-line" } },
+        newLine: { inControlFlowStatements: { begin: "next-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },
@@ -54,11 +54,43 @@ end;`;
   {
     description: "expect to move statement on new line",
     f: () => {
-      const textExpected = `if true then 
+      const textExpected = `if true then
 Valid := false;`;
       const text = `if true then Valid := false;`;
       const formatted = getFormatted(getTokens(text), {
-        newLine: { inControlFlowStatements: { other: "new-line" } },
+        newLine: { inControlFlowStatements: { other: "next-line" } },
+      });
+      deepStrictEqual(formatted, textExpected);
+    },
+  },
+  {
+    description: "expect to move begin on new line",
+    f: () => {
+      const textExpected = `if true then
+begin
+Valid := false;
+end;`;
+      const text = `if true then
+
+begin
+Valid := false;
+end;`;
+      const formatted = getFormatted(getTokens(text), {
+        newLine: { inControlFlowStatements: { begin: "next-line" } },
+      });
+      deepStrictEqual(formatted, textExpected);
+    },
+  },
+  {
+    description: "expect to move statement on new line",
+    f: () => {
+      const textExpected = `if true then
+Valid := false;`;
+      const text = `if true then
+
+Valid := false;`;
+      const formatted = getFormatted(getTokens(text), {
+        newLine: { inControlFlowStatements: { other: "next-line" } },
       });
       deepStrictEqual(formatted, textExpected);
     },
