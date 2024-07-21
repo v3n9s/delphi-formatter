@@ -10,8 +10,9 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "lint": "eslint .",
-    "dev": "npm run clean && tsc --watch --preserveWatchOutput",
-    "build": "npm run clean && tsc"
+    "dev": "npm run clean && tsc --project ./tsconfig.dev.json --watch --preserveWatchOutput",
+    "test": "npm run clean && tsc --project ./tsconfig.dev.json && node ./dist/tests/run.js",
+    "build": "npm run clean && tsc --project ./tsconfig.build.json"
   },
   "dependencies": {
     "@types/node": "^20.14.11"

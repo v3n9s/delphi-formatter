@@ -19,8 +19,6 @@
     "types": ["node"],
 
     // emit
-    "declaration": true,
-    "declarationMap": true,
     "outDir": "./dist",
 
     // interop constraints
